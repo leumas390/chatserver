@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js" integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    
+    <script type="text/javascript"> /*the javascript interacts with the backend*/
+        $(document).ready(function() {
+            var socket = io.connect("http://localhost:5000") /*connects to the backend*/
+            socket.on('connect', function() {
+                socket.send("User Connected!");
+            });
+             /* this section connect to the @socketio.on('message') in the backend and data get added to the messages div*/
+            socket.on('message', function(data) {
+               $('#messages').append($('<p>').text(data));
+            });
+            
+            $('#sendBtn').on('click', function () {
+                socket.send($('#username').val() + ': ' + $('#message').val());
+                $('#message').val('');
+            });
+        })
+    </script>
+        <div class="chat">
+            <div id="messages"> 
+
+            </div>
+
+            <input type="text" id="username" placeholder="Username">
+            <input type="text" id="message" placeholder="Message">
+            <button id="sendBtn">Send</button>
+            </div>
+    </div>
+</body>
+</html>
